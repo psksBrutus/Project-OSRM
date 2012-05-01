@@ -127,6 +127,11 @@ EdgeBasedGraphFactory::EdgeBasedGraphFactory(int nodes, std::vector<NodeBasedEdg
     std::sort( edges.begin(), edges.end() );
 
     _nodeBasedGraph.reset(new _NodeBasedDynamicGraph( nodes, edges ));
+    INFO("Converted " << inputEdges.size() << " node-based edges into " << _nodeBasedGraph->GetNumberOfEdges() << " edge-based nodes.");
+
+    //Explore all connected components
+    _bfsExplorer.reset(new ConnectedComponentExplorer(_nodeBasedGraph) );
+    _bfsExplorer->Run();
 }
 
 void EdgeBasedGraphFactory::GetEdgeBasedEdges(std::vector< EdgeBasedEdge >& outputEdgeList ) {

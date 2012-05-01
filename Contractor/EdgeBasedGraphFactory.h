@@ -33,8 +33,10 @@
 #include <stxxl.h>
 #include <cstdlib>
 
+#include "ConnectedComponentExplorer.h"
+#include "NodeBasedGraph.h"
+
 #include "../typedefs.h"
-#include "../DataStructures/DynamicGraph.h"
 #include "../DataStructures/ExtractorStructs.h"
 #include "../DataStructures/HashTable.h"
 #include "../DataStructures/ImportEdge.h"
@@ -47,18 +49,6 @@
 
 class EdgeBasedGraphFactory {
 private:
-    struct _NodeBasedEdgeData {
-        int distance;
-        unsigned edgeBasedNodeID;
-        unsigned nameID:31;
-        bool shortcut:1;
-        bool forward:1;
-        bool backward:1;
-        bool roundabout:1;
-        bool ignoreInGrid:1;
-        short type;
-        bool isAccessRestricted;
-    };
 
     struct _EdgeBasedEdgeData {
         int distance;
@@ -69,8 +59,6 @@ private:
         short turnInstruction;
     };
 
-    typedef DynamicGraph< _NodeBasedEdgeData > _NodeBasedDynamicGraph;
-    typedef _NodeBasedDynamicGraph::InputEdge _NodeBasedEdge;
 
 public:
     struct EdgeBasedNode {
@@ -91,9 +79,10 @@ public:
     };
 
 private:
-    boost::shared_ptr<_NodeBasedDynamicGraph>   _nodeBasedGraph;
-    boost::unordered_map<NodeID, bool>          _barrierNodes;
-    boost::unordered_map<NodeID, bool>          _trafficLights;
+    boost::shared_ptr<_NodeBasedDynamicGraph>   	_nodeBasedGraph;
+    boost::shared_ptr<ConnectedComponentExplorer>	_bfsExplorer;
+    boost::unordered_map<NodeID, bool>          	_barrierNodes;
+    boost::unordered_map<NodeID, bool>          	_trafficLights;
 
     typedef std::pair<NodeID, NodeID> RestrictionSource;
     typedef std::pair<NodeID, bool>   RestrictionTarget;
