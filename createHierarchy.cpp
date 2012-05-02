@@ -126,7 +126,9 @@ int main (int argc, char *argv[]) {
     EdgeBasedGraphFactory * edgeBasedGraphFactory = new EdgeBasedGraphFactory (nodeBasedNodeNumber, edgeList, bollardNodes, trafficLightNodes, inputRestrictions, internalToExternalNodeMapping, speedProfile, SRTM_ROOT);
     std::vector<ImportEdge>().swap(edgeList);
 
+
     edgeBasedGraphFactory->Run(edgeOut);
+
     std::vector<_Restriction>().swap(inputRestrictions);
     std::vector<NodeID>().swap(bollardNodes);
     std::vector<NodeID>().swap(trafficLightNodes);
