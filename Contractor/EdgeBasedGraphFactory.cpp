@@ -130,7 +130,7 @@ EdgeBasedGraphFactory::EdgeBasedGraphFactory(int nodes, std::vector<NodeBasedEdg
     INFO("Converted " << inputEdges.size() << " node-based edges into " << _nodeBasedGraph->GetNumberOfEdges() << " edge-based nodes.");
 
     //Explore all connected components
-    _bfsExplorer.reset(new ConnectedComponentExplorer(_nodeBasedGraph) );
+    _bfsExplorer.reset(new ConnectedComponentExplorer(_nodeBasedGraph, _barrierNodes) );
     _bfsExplorer->Run();
 }
 
@@ -213,7 +213,9 @@ void EdgeBasedGraphFactory::Run(const char * originalEdgeDataFilename) {
         for(_NodeBasedDynamicGraph::EdgeIterator e1 = _nodeBasedGraph->BeginEdges(u); e1 < _nodeBasedGraph->EndEdges(u); ++e1) {
             _NodeBasedDynamicGraph::NodeIterator v = _nodeBasedGraph->GetTarget(e1);
 
-            if(_nodeBasedGraph->GetEdgeData(e1).type != SHRT_MAX) {
+            if(_nodeBasedGraph->GetEdgeData(e1).type != SHRT_MAX && !_nodeBasedGraph->GetEdgeData(e1).belongsToTinyComponent) {
+                if(_nodeBasedGraph->GetEdgeData(e1).belongsToTinyComponent)
+                    ERR("!");
                 assert(e1 != UINT_MAX);
                 assert(u != UINT_MAX);
                 assert(v != UINT_MAX);
