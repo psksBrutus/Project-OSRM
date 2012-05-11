@@ -31,13 +31,12 @@ void ConnectedComponentExplorer::Run(){
 	BinaryHeap<unsigned, int, int, BFSHeapData> bfsHeap(_graph->GetNumberOfNodes());
 	for(unsigned i = 0; i < _graph->GetNumberOfNodes(); ++i) {
 		if(!bfsHeap.WasInserted(i)) {
-			unsigned previousSizeofCC = visitedNodeCounter;
+			unsigned previousVisitedNodeCounter = visitedNodeCounter;
 			_vectorOfComponents.resize(componentCounter+1);
 			bfsHeap.Insert(i, visitedNodeCounter++, componentCounter);
 			while(bfsHeap.Size()) {
 				//get next element from queue
 				unsigned currentNode = bfsHeap.DeleteMin();
-				//todo: insert element into _vectorOfComponents
 				_vectorOfComponents.at(componentCounter).push_back(currentNode);
 				//relax outgoing edges
 				for(_NodeBasedDynamicGraph::EdgeIterator edge = _graph->BeginEdges(currentNode), end = _graph->EndEdges(currentNode); edge != end; ++edge) {
@@ -48,11 +47,20 @@ void ConnectedComponentExplorer::Run(){
 					}
 				}
 			}
-			++componentCounter;
-			INFO("CC: " << componentCounter << ", size: " << visitedNodeCounter-previousSizeofCC);
+			//Marking edges from tiny components as such
+			if((visitedNodeCounter-previousVisitedNodeCounter) < TINY_COMPONENT_SIZE_THRESHOLD) {
+			    INFO("CC: " << componentCounter << ", size: " << visitedNodeCounter-previousVisitedNodeCounter);
+			    for(unsigned j = 0, endOfNodes = _vectorOfComponents.at(componentCounter).size() ; j < endOfNodes; ++j) {
+			        unsigned currentNode = _vectorOfComponents.at(componentCounter)[j];
+	                for(_NodeBasedDynamicGraph::EdgeIterator edge = _graph->BeginEdges(currentNode), end = _graph->EndEdges(currentNode); edge != end; ++edge) {
+	                    _graph->GetEdgeData(edge).belongsToTinyComponent = true;
+	                }
+			    }
+			}
+            ++componentCounter;
 		}
 	}
-	INFO("Finished CC exploration of input graph");
+	INFO("Finished CC exploration of input graph, marked nodes of tiny edges");
 //	ProduceHistogram();
 }
 

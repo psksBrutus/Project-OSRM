@@ -27,6 +27,8 @@ or see http://www.gnu.org/licenses/agpl.txt.
 
 #include "NodeBasedGraph.h"
 
+const static unsigned TINY_COMPONENT_SIZE_THRESHOLD = 25;
+
 class ConnectedComponentExplorer {
 public:
 	ConnectedComponentExplorer(boost::shared_ptr<_NodeBasedDynamicGraph> & g);
