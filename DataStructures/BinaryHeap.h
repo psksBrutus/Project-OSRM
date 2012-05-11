@@ -24,6 +24,7 @@ or see http://www.gnu.org/licenses/agpl.txt.
 //Not compatible with non contiguous node ids
 
 #include <cassert>
+#include <cstring>
 #include <limits>
 #include <vector>
 #include <algorithm>
@@ -35,7 +36,7 @@ class ArrayStorage {
 public:
 
     ArrayStorage( size_t size ) : positions( new Key[size] ) {
-        memset(positions, 0, size*sizeof(Key));
+       memset(positions, 0, size*sizeof(Key));
     }
 
     ~ArrayStorage() {

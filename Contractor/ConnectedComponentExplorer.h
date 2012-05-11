@@ -22,6 +22,7 @@ or see http://www.gnu.org/licenses/agpl.txt.
 #define CCEXPLORER_H_
 
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 
 #include <vector>
 
@@ -31,7 +32,7 @@ const static unsigned TINY_COMPONENT_SIZE_THRESHOLD = 25;
 
 class ConnectedComponentExplorer {
 public:
-	ConnectedComponentExplorer(boost::shared_ptr<_NodeBasedDynamicGraph> & g);
+	ConnectedComponentExplorer(boost::shared_ptr<_NodeBasedDynamicGraph> & g, boost::unordered_map<NodeID, bool> & bn);
 	void Run();
 	unsigned GetNumberOfConnectedComponents() const;
 	std::vector<unsigned> & GetComponent(unsigned i);
@@ -39,6 +40,7 @@ public:
 
 	unsigned _numberOfComponents;
 	std::vector<std::vector<unsigned> > _vectorOfComponents;
+	boost::unordered_map<NodeID, bool> & _barrierNodes;
 	boost::shared_ptr<_NodeBasedDynamicGraph> _graph;
 private:
 	struct BFSHeapData {

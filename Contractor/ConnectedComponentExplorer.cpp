@@ -22,7 +22,7 @@ or see http://www.gnu.org/licenses/agpl.txt.
 #include "ConnectedComponentExplorer.h"
 #include "../DataStructures/BinaryHeap.h"
 
-ConnectedComponentExplorer::ConnectedComponentExplorer(boost::shared_ptr<_NodeBasedDynamicGraph> & g) : _graph(g) {
+ConnectedComponentExplorer::ConnectedComponentExplorer(boost::shared_ptr<_NodeBasedDynamicGraph> & g, boost::unordered_map<NodeID, bool> & bn) : _graph(g), _barrierNodes(bn) {
 
 }
 void ConnectedComponentExplorer::Run(){
@@ -38,6 +38,9 @@ void ConnectedComponentExplorer::Run(){
 				//get next element from queue
 				unsigned currentNode = bfsHeap.DeleteMin();
 				_vectorOfComponents.at(componentCounter).push_back(currentNode);
+				//todo: continue if bollard node
+//				if(_barrierNodes[currentNode])
+//				    continue;
 				//relax outgoing edges
 				for(_NodeBasedDynamicGraph::EdgeIterator edge = _graph->BeginEdges(currentNode), end = _graph->EndEdges(currentNode); edge != end; ++edge) {
 					unsigned targetNode = _graph->GetTarget(edge);
