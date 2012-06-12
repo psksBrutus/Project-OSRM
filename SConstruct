@@ -6,6 +6,17 @@ import string
 import sys
 from subprocess import call
 
+def Parse(lib, name):
+    print 'Checking availability of %s ...' % name,
+    if not ('pkg-config --cflags --libs %s' % lib):
+        print 'FAILED!'
+        return 0
+    else:
+        print 'OK'
+        env.ParseConfig('pkg-config --cflags --libs %s' % lib)
+        return 1
+
+
 def CheckBoost(context, version):
     # Boost versions are in format major.minor.subminor
     v_arr = version.split(".")
@@ -245,6 +256,11 @@ if not conf.CheckCXXHeader('boost/unordered_map.hpp'):
 #	print "tbb/task_scheduler_init.h not found. Exiting"
 #	Exit(-1)
 
+#if not conf.CheckLib('jemalloc'):
+#	print 'Did not find jemalloc library, exiting!'
+#	Exit(-1)
+
+test = Parse('luabind', 'Luabind C/C++ bindings')
 
 protobld = Builder(action = 'protoc -I=DataStructures/pbf-proto --cpp_out=DataStructures/pbf-proto $SOURCE')
 env.Append(BUILDERS = {'Protobuf' : protobld})
