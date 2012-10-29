@@ -1,3 +1,14 @@
+/osm-data/niedersachsen.osm.pbf
+/osm-data/niedersachsen.osrm
+/osm-data/niedersachsen.osrm.edges
+/osm-data/niedersachsen.osrm.fileIndex
+/osm-data/niedersachsen.osrm.hsgr
+/osm-data/niedersachsen.osrm.names
+/osm-data/niedersachsen.osrm.nodes
+/osm-data/niedersachsen.osrm.ramIndex
+/osm-data/niedersachsen.osrm.restrictions
+/.autotools
+/ProjectInfoExtractor.py
 # Compiled source #
 ###################
 *.com
